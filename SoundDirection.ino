@@ -31,13 +31,11 @@ void loop() {
     signed int valRight = analogRead(1) - MIDIUM_VOLTAGE;
     waveLeft[i] = valLeft;
     waveRight[i] = valRight;
-    Serial.print(valLeft);
-    Serial.print(" ");
-    Serial.println(valRight);
     if (abs(valLeft) > THREHOLD_VALUE){
       threholdOverCount++;
     }    
   }
+  
   if (threholdOverCount > THREHOLD_COUNT){
     int maxIndex = 0;
     signed long maxValue = 0;
@@ -52,11 +50,8 @@ void loop() {
       }
     }
     long tdoa = SAMPLING_MICROSEC * maxIndex;
-    long theta = acos((tdoa * SOUND_SPEED) / SPEAKER_DISTANCE);
-    Serial.print("maxIndex");
-    Serial.println(maxIndex);
-    Serial.print("theta");
-    Serial.println(theta);
+    float thetaR = acos((tdoa * SOUND_SPEED) / SPEAKER_DISTANCE);
+    float theta = map(thetaR, 0, 3.14 , 0, 180);    
     myservo.write(theta);     
   }
   delay(2000);
